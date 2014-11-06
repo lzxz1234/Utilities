@@ -1,0 +1,1529 @@
+/*==============================================================*/
+/* DBMS name:      MySQL 5.0                                    */
+/* Created on:     2013/6/6 14:11:59                            */
+/*==============================================================*/
+
+
+drop table if exists ACTIVITY;
+
+drop index UK_ACTIVITY_APPLY_APPLICANT_ACTIVITY_ID on ACTIVITY_APPLY;
+
+drop index IDX_ACTIVITY_APPLY_ACTIVITY_ID on ACTIVITY_APPLY;
+
+drop table if exists ACTIVITY_APPLY;
+
+drop index IDX_ANSWER_USER_ID on ANSWER;
+
+drop index IDX_ANSWER_QUESTION_ID on ANSWER;
+
+drop table if exists ANSWER;
+
+drop table if exists BOOK;
+
+drop index IDX_CHAPTER_BOOK_ID on CHAPTER;
+
+drop index IDX_CHAPTER_PID on CHAPTER;
+
+drop table if exists CHAPTER;
+
+drop index IDX_COMMENT_RESOURCE_ID on COMMENT;
+
+drop table if exists COMMENT;
+
+drop index IDX_CONSULT_OCCUPANCY_ID on CONSULT;
+
+drop index IDX_CONSULT_USER_ID on CONSULT;
+
+drop table if exists CONSULT;
+
+drop index IDX_EXCHANGE_STATION_ID on EXCHANGE;
+
+drop table if exists EXCHANGE;
+
+drop index UK_FAVORITE_TABLENAME_PKVALUE_USERID on FAVORITE;
+
+drop index IDX_FAVORITE_USER_ID on FAVORITE;
+
+drop table if exists FAVORITE;
+
+drop table if exists FILE;
+
+drop index IDX_FRIEND_USER_ID on FRIEND;
+
+drop table if exists FRIEND;
+
+drop index UK_GRP_NAME on GRP;
+
+drop table if exists GRP;
+
+drop table if exists GRP_MEMBER;
+
+drop table if exists INFO;
+
+drop table if exists LOG;
+
+drop index IDX_MA_ROLE_ID on MA;
+
+drop index IDX_MA_MENU_ID on MA;
+
+drop table if exists MA;
+
+drop index IDX_MAIL_USER_ID on MAIL;
+
+drop table if exists MAIL;
+
+drop index IDX_MENU_PID on MENU;
+
+drop index UK_MENU_NAME on MENU;
+
+drop table if exists MENU;
+
+drop index IDX_OA_ROLE_ID on OA;
+
+drop index IDX_OA_ORG_ID on OA;
+
+drop table if exists OA;
+
+drop index IDX_OBJ_ORG_ID on OBJ;
+
+drop table if exists OBJ;
+
+drop index IDX_OCCUPANCY_ROOM_ID on OCCUPANCY;
+
+drop table if exists OCCUPANCY;
+
+drop index IDX_OPTIONS_QUESTION_ID on OPTIONS;
+
+drop table if exists OPTIONS;
+
+drop index IDX_ORG_PID on ORG;
+
+drop index UK_ORG_NAME on ORG;
+
+drop table if exists ORG;
+
+drop index IDX_PA_ROLE_ID on PA;
+
+drop index IDX_PA_PERM_ID on PA;
+
+drop table if exists PA;
+
+drop index UK_PARAMETER_NAME on PARAMETER;
+
+drop table if exists PARAMETER;
+
+drop index UK_PERMISSION_CODE on PERMISSION;
+
+drop index UK_PERMISSION_NAME on PERMISSION;
+
+drop table if exists PERMISSION;
+
+drop index IDX_QUESTION_RESOURCE_ID on QUESTION;
+
+drop table if exists QUESTION;
+
+drop index IDX_RA_RESOURCE_SET_ID on RA;
+
+drop index IDX_RA_RESOURCE_ID on RA;
+
+drop table if exists RA;
+
+drop index IDX_RATING_USER_ID on RATING;
+
+drop index IDX_RATING_RESOURCE_ID on RATING;
+
+drop table if exists RATING;
+
+drop table if exists RESOURCE;
+
+drop index UK_RESOURCE_SET_CODE on RESOURCE_SET;
+
+drop index UK_RESOURCE_SET_NAME on RESOURCE_SET;
+
+drop table if exists RESOURCE_SET;
+
+drop index UK_ROLE_NAME on ROLE;
+
+drop table if exists ROLE;
+
+drop index UK_ROOM_NAME on ROOM;
+
+drop table if exists ROOM;
+
+drop index IDX_SCORE_USER_ID on SCORE;
+
+drop table if exists SCORE;
+
+drop index UK_SCORE_RULE_CODE on SCORE_RULE;
+
+drop index UK_SCORE_RULE_NAME on SCORE_RULE;
+
+drop table if exists SCORE_RULE;
+
+drop table if exists STATION;
+
+drop table if exists TASK;
+
+drop index IDX_TASK_REPLY_TASK_ID on TASK_REPLY;
+
+drop table if exists TASK_REPLY;
+
+drop index IDX_TOPIC on TOPIC;
+
+drop table if exists TOPIC;
+
+drop index IDX_TOPIC_REPLY on TOPIC_REPLY;
+
+drop table if exists TOPIC_REPLY;
+
+drop index IDX_UA_ROLE_ID on UA;
+
+drop index IDX_UA_USER_ID on UA;
+
+drop table if exists UA;
+
+drop index IDX_USER_ORG_ID on USER;
+
+drop index UK_USER_MOBILE on USER;
+
+drop index UK_USER_EMAIL on USER;
+
+drop index UK_USER_USERNAME on USER;
+
+drop table if exists USER;
+
+drop index IDX_USER_EDU_USER_ID on USER_EDU;
+
+drop table if exists USER_EDU;
+
+drop index IDX_USER_FAMILY_USER_ID on USER_FAMILY;
+
+drop table if exists USER_FAMILY;
+
+drop table if exists USER_INFO;
+
+drop index IDX_USER_ORDER_USER_ID on USER_ORDER;
+
+drop table if exists USER_ORDER;
+
+drop table if exists USER_PARTY;
+
+drop index IDX_USER_PARTY_JOB_USER_ID on USER_PARTY_JOB;
+
+drop table if exists USER_PARTY_JOB;
+
+/*==============================================================*/
+/* Table: ORG                                                   */
+/*==============================================================*/
+create table ORG
+(
+   ID                   int not null auto_increment,
+   NAME                 varchar(30) not null,
+   ICON                 varchar(1000),
+   INTRO                longtext,
+   SEQ                  int not null,
+   DEFAULT_ROLE_ID      int not null,
+   TOTAL_SCORE          bigint not null default 0,
+   SCORE                bigint not null default 0,
+   PID                  int,
+   primary key (ID),
+   constraint FK_ORG_REF_ORG foreign key (PID)
+      references ORG (ID) on delete restrict on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: OBJ                                                   */
+/*==============================================================*/
+create table OBJ
+(
+   ID                   bigint not null auto_increment,
+   STATUS               tinyint not null comment '1=编辑 2=待审 3=发布',
+   ORG_ID               int not null,
+   CREATOR_ID           int not null,
+   CREATOR              varchar(30) not null,
+   CREATE_TIME          timestamp not null default CURRENT_TIMESTAMP,
+   LAST_ACTOR_ID        int not null,
+   LAST_ACTOR           varchar(30) not null,
+   LAST_ACT_TIME        timestamp not null default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   primary key (ID),
+   constraint FK_OBJ_REF_ORG foreign key (ORG_ID)
+      references ORG (ID) on delete restrict on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: RESOURCE                                              */
+/*==============================================================*/
+create table RESOURCE
+(
+   ID                   bigint not null,
+   TYPE                 tinyint not null comment '1=资讯 2=图书 3=图片 4=音频 5=视频 6=问卷 7=活动 8=任务 9=驻地资源',
+   NAME                 varchar(100) not null,
+   REMARK               varchar(500),
+   URL                  varchar(1000),
+   COMMENT              bool not null,
+   primary key (ID),
+   constraint FK_RESOURCE_REF_OBJ foreign key (ID)
+      references OBJ (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: ACTIVITY                                              */
+/*==============================================================*/
+create table ACTIVITY
+(
+   ID                   bigint not null,
+   KIND                 tinyint not null,
+   ACT_TIME             datetime not null,
+   ACT_PLACE            varchar(100) not null,
+   USER_LIMIT           int not null,
+   SCORE                int not null,
+   INTRO                longtext not null,
+   OUTLAY               varchar(100) not null,
+   FINISH               bool not null,
+   primary key (ID),
+   constraint FK_ACTIVITY_REF_RESOURCE foreign key (ID)
+      references RESOURCE (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: ACTIVITY_APPLY                                        */
+/*==============================================================*/
+create table ACTIVITY_APPLY
+(
+   ID                   bigint not null auto_increment,
+   APPLICANT_ID         int not null,
+   APPLICANT            varchar(30) not null,
+   APPLY_TIME           timestamp not null default CURRENT_TIMESTAMP,
+   PRESENT              bool not null,
+   ACTIVITY_ID          bigint not null,
+   primary key (ID),
+   constraint FK_ACTIVITY_APPLY_REF_ACTIVITY foreign key (ACTIVITY_ID)
+      references ACTIVITY (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_ACTIVITY_APPLY_ACTIVITY_ID                        */
+/*==============================================================*/
+create index IDX_ACTIVITY_APPLY_ACTIVITY_ID on ACTIVITY_APPLY
+(
+   ACTIVITY_ID
+);
+
+/*==============================================================*/
+/* Index: UK_ACTIVITY_APPLY_APPLICANT_ACTIVITY_ID               */
+/*==============================================================*/
+create unique index UK_ACTIVITY_APPLY_APPLICANT_ACTIVITY_ID on ACTIVITY_APPLY
+(
+   APPLICANT,
+   ACTIVITY_ID
+);
+
+/*==============================================================*/
+/* Table: QUESTION                                              */
+/*==============================================================*/
+create table QUESTION
+(
+   ID                   bigint not null auto_increment,
+   TOPIC                varchar(200) not null,
+   TYPE                 tinyint(1) not null comment '1=单选 2=多选 3=填空 4=答题',
+   RESOURCE_ID          bigint not null,
+   primary key (ID),
+   constraint FK_QUESTION_REF_RESOURCE foreign key (RESOURCE_ID)
+      references RESOURCE (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: USER                                                  */
+/*==============================================================*/
+create table USER
+(
+   ID                   int not null auto_increment,
+   USERNAME             varchar(30) not null,
+   PASSWORD             varchar(40) not null,
+   EMAIL                varchar(50) not null,
+   MOBILE               varchar(11) not null,
+   PORTRAIT             varchar(1000),
+   TOTAL_SCORE          bigint not null default 0,
+   SCORE                bigint not null default 0,
+   PAUSE                bool not null default 0,
+   STATUS               tinyint not null default 0 comment '-1=拒绝 0=申请 1=通过',
+   ORG_ID               int not null,
+   primary key (ID),
+   constraint FK_USER_REF_ORG foreign key (ORG_ID)
+      references ORG (ID) on delete restrict on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: ANSWER                                                */
+/*==============================================================*/
+create table ANSWER
+(
+   QUESTION_ID          bigint not null,
+   USER_ID              int not null,
+   CONTENT              longtext not null,
+   ANSWER_TIME          timestamp not null default CURRENT_TIMESTAMP,
+   primary key (QUESTION_ID, USER_ID),
+   constraint FK_ANSWER_REF_QUESTION foreign key (QUESTION_ID)
+      references QUESTION (ID) on delete cascade on update cascade,
+   constraint FK_ANSWER_REF_USER foreign key (USER_ID)
+      references USER (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_ANSWER_QUESTION_ID                                */
+/*==============================================================*/
+create index IDX_ANSWER_QUESTION_ID on ANSWER
+(
+   QUESTION_ID
+);
+
+/*==============================================================*/
+/* Index: IDX_ANSWER_USER_ID                                    */
+/*==============================================================*/
+create index IDX_ANSWER_USER_ID on ANSWER
+(
+   USER_ID
+);
+
+/*==============================================================*/
+/* Table: BOOK                                                  */
+/*==============================================================*/
+create table BOOK
+(
+   ID                   bigint not null,
+   AUTHOR               varchar(30),
+   ISBN                 varchar(50),
+   PRESS                varchar(50),
+   PUB_TIME             datetime,
+   COVER                varchar(500),
+   primary key (ID),
+   constraint FK_BOOK_REF_RESOURCE foreign key (ID)
+      references RESOURCE (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: CHAPTER                                               */
+/*==============================================================*/
+create table CHAPTER
+(
+   ID                   bigint not null auto_increment,
+   SEQ                  int not null,
+   NAME                 varchar(500),
+   CONTENT              longtext,
+   PID                  bigint,
+   BOOK_ID              bigint not null,
+   primary key (ID),
+   constraint FK_CHAPTER_REF_CHAPTER foreign key (PID)
+      references CHAPTER (ID) on delete cascade on update cascade,
+   constraint FK_CHAPTER_REF_BOOK foreign key (BOOK_ID)
+      references BOOK (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_CHAPTER_PID                                       */
+/*==============================================================*/
+create index IDX_CHAPTER_PID on CHAPTER
+(
+   PID
+);
+
+/*==============================================================*/
+/* Index: IDX_CHAPTER_BOOK_ID                                   */
+/*==============================================================*/
+create index IDX_CHAPTER_BOOK_ID on CHAPTER
+(
+   BOOK_ID
+);
+
+/*==============================================================*/
+/* Table: COMMENT                                               */
+/*==============================================================*/
+create table COMMENT
+(
+   ID                   bigint not null auto_increment,
+   USER_ID              int not null,
+   USERNAME             varchar(30) not null,
+   COMMENT_TIME         timestamp not null default CURRENT_TIMESTAMP,
+   IP                   varchar(40) not null,
+   CONTENT              longtext not null,
+   STATUS               tinyint not null comment '-1=拒绝 0=待审 1=通过',
+   RESOURCE_ID          bigint not null,
+   primary key (ID),
+   constraint FK_COMMENT_REF_RESOURCE foreign key (RESOURCE_ID)
+      references RESOURCE (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_COMMENT_RESOURCE_ID                               */
+/*==============================================================*/
+create index IDX_COMMENT_RESOURCE_ID on COMMENT
+(
+   RESOURCE_ID
+);
+
+/*==============================================================*/
+/* Table: ROOM                                                  */
+/*==============================================================*/
+create table ROOM
+(
+   ID                   int not null auto_increment,
+   NAME                 varchar(20) not null,
+   TYPE                 tinyint not null,
+   primary key (ID)
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: OCCUPANCY                                             */
+/*==============================================================*/
+create table OCCUPANCY
+(
+   ID                   bigint not null auto_increment,
+   EXPERT_ID            int not null,
+   EXPERT               varchar(30) not null,
+   INTRO                varchar(200) not null,
+   OCCUPY               bool not null,
+   START_TIME           datetime not null,
+   END_TIME             datetime,
+   ROOM_ID              int not null,
+   primary key (ID),
+   constraint FK_OCCUPANCY_REF_ROOM foreign key (ROOM_ID)
+      references ROOM (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: CONSULT                                               */
+/*==============================================================*/
+create table CONSULT
+(
+   ID                   bigint not null auto_increment,
+   USER_ID              int not null,
+   USER_SPEAK           bool not null,
+   CONTENT              longtext not null,
+   SPEAK_TIME           timestamp not null default CURRENT_TIMESTAMP,
+   OCCUPANCY_ID         bigint not null,
+   primary key (ID),
+   constraint FK_CONSULT_REF_OCCUPANCY foreign key (OCCUPANCY_ID)
+      references OCCUPANCY (ID) on delete cascade on update cascade,
+   constraint FK_CONSULT_REF_USER foreign key (USER_ID)
+      references USER (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_CONSULT_USER_ID                                   */
+/*==============================================================*/
+create index IDX_CONSULT_USER_ID on CONSULT
+(
+   USER_ID
+);
+
+/*==============================================================*/
+/* Index: IDX_CONSULT_OCCUPANCY_ID                              */
+/*==============================================================*/
+create index IDX_CONSULT_OCCUPANCY_ID on CONSULT
+(
+   OCCUPANCY_ID
+);
+
+/*==============================================================*/
+/* Table: STATION                                               */
+/*==============================================================*/
+create table STATION
+(
+   ID                   bigint not null,
+   KIND                 tinyint not null comment '系统参数配置',
+   UNIT                 varchar(30),
+   SCORE                int not null,
+   INTRO                longtext,
+   LINKMAN              varchar(30) not null,
+   CONTACT              varchar(100) not null,
+   OCCUPANCY            bool not null,
+   primary key (ID),
+   constraint FK_STATION_REF_RESOURCE foreign key (ID)
+      references RESOURCE (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: EXCHANGE                                              */
+/*==============================================================*/
+create table EXCHANGE
+(
+   ID                   bigint not null auto_increment,
+   APPLICANT_ID         int not null,
+   APPLICANT            varchar(30) not null,
+   APPLY_TIME           timestamp not null default CURRENT_TIMESTAMP,
+   STATUS               tinyint not null comment '-1=拒绝 0=申请 1=通过',
+   REPLY_DESC           varchar(200),
+   STATION_ID           bigint not null,
+   primary key (ID),
+   constraint FK_EXCHANGE_REF_STATION foreign key (STATION_ID)
+      references STATION (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_EXCHANGE_STATION_ID                               */
+/*==============================================================*/
+create index IDX_EXCHANGE_STATION_ID on EXCHANGE
+(
+   STATION_ID
+);
+
+/*==============================================================*/
+/* Table: FAVORITE                                              */
+/*==============================================================*/
+create table FAVORITE
+(
+   ID                   bigint not null auto_increment,
+   TABLE_NAME           varchar(30) not null,
+   PK_VALUE             bigint not null,
+   FAV_TIME             timestamp not null default CURRENT_TIMESTAMP,
+   REMARK               varchar(100),
+   USER_ID              int not null,
+   primary key (ID),
+   constraint FK_FAVORITE_REF_USER foreign key (USER_ID)
+      references USER (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_FAVORITE_USER_ID                                  */
+/*==============================================================*/
+create index IDX_FAVORITE_USER_ID on FAVORITE
+(
+   USER_ID
+);
+
+/*==============================================================*/
+/* Index: UK_FAVORITE_TABLENAME_PKVALUE_USERID                  */
+/*==============================================================*/
+create unique index UK_FAVORITE_TABLENAME_PKVALUE_USERID on FAVORITE
+(
+   TABLE_NAME,
+   PK_VALUE,
+   USER_ID
+);
+
+/*==============================================================*/
+/* Table: FILE                                                  */
+/*==============================================================*/
+create table FILE
+(
+   ID                   bigint not null,
+   FILENAME             varchar(250) not null,
+   EXT_NAME             varchar(20) not null,
+   MIME                 varchar(100) not null,
+   primary key (ID),
+   constraint FK_FILE_REF_RESOURCE foreign key (ID)
+      references RESOURCE (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+alter table FILE comment '包括图片、音频、视频等单个文件资源';
+
+/*==============================================================*/
+/* Table: FRIEND                                                */
+/*==============================================================*/
+create table FRIEND
+(
+   USER_ID              int not null,
+   FRIEND               varchar(30) not null,
+   REMARK               varchar(30),
+   STATUS               tinyint(1) not null comment '-1=黑名单 0=待审批 1=正常',
+   primary key (USER_ID, FRIEND),
+   constraint FK_FRIEND_REF_USER foreign key (USER_ID)
+      references USER (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_FRIEND_USER_ID                                    */
+/*==============================================================*/
+create index IDX_FRIEND_USER_ID on FRIEND
+(
+   USER_ID
+);
+
+/*==============================================================*/
+/* Table: GRP                                                   */
+/*==============================================================*/
+create table GRP
+(
+   ID                   int not null auto_increment,
+   NAME                 varchar(30) not null,
+   TYPE                 tinyint not null comment '种类配置在系统参数中',
+   ICON                 varchar(1000) not null,
+   INTRO                longtext not null,
+   USER_COUNT           int not null,
+   ADMIN_ID             varchar(120) not null comment '限10人',
+   ADMIN                varchar(320) not null comment '限10人',
+   APPROVAL             bool not null,
+   CREATE_TIME          timestamp not null default CURRENT_TIMESTAMP,
+   STATUS               tinyint not null comment '-1=拒绝 0=待审 1=通过',
+   primary key (ID)
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: UK_GRP_NAME                                           */
+/*==============================================================*/
+create unique index UK_GRP_NAME on GRP
+(
+   NAME
+);
+
+/*==============================================================*/
+/* Table: GRP_MEMBER                                            */
+/*==============================================================*/
+create table GRP_MEMBER
+(
+   GRP_ID               int not null,
+   USER_ID              int not null,
+   USERNAME             varchar(30) not null,
+   STATUS               tinyint not null comment '-1=拒绝 0=待审 1=通过',
+   PAUSE                bool not null,
+   JOIN_TIME            timestamp not null default CURRENT_TIMESTAMP,
+   primary key (GRP_ID, USER_ID),
+   constraint FK_GRP_MEMBER_REF_GRP foreign key (GRP_ID)
+      references GRP (ID) on delete cascade on update cascade,
+   constraint FK_GRP_MEMBER_REF_USER foreign key (USER_ID)
+      references USER (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: INFO                                                  */
+/*==============================================================*/
+create table INFO
+(
+   ID                   bigint not null,
+   SOURCE               varchar(50),
+   CONTENT              longtext,
+   primary key (ID),
+   constraint FK_INFO_REF_RESOURCE foreign key (ID)
+      references RESOURCE (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: LOG                                                   */
+/*==============================================================*/
+create table LOG
+(
+   ID                   bigint not null auto_increment,
+   ACTOR_ID             int not null,
+   ACTOR                varchar(30) not null,
+   ACTION_TIME          timestamp not null default CURRENT_TIMESTAMP,
+   PERM_NAME            varchar(50) not null,
+   TABLE_NAME           varchar(30) not null,
+   PK_VALUE             bigint not null,
+   DATA                 longtext,
+   primary key (ID)
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: MENU                                                  */
+/*==============================================================*/
+create table MENU
+(
+   ID                   int not null auto_increment,
+   NAME                 varchar(10) not null,
+   URL                  varchar(500) not null,
+   SEQ                  int not null,
+   PID                  int,
+   primary key (ID),
+   constraint FK_MENU_REF_MENU foreign key (PID)
+      references MENU (ID) on delete restrict on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: ROLE                                                  */
+/*==============================================================*/
+create table ROLE
+(
+   ID                   int not null auto_increment,
+   NAME                 varchar(30) not null,
+   primary key (ID)
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: MA                                                    */
+/*==============================================================*/
+create table MA
+(
+   MENU_ID              int not null,
+   ROLE_ID              int not null,
+   primary key (MENU_ID, ROLE_ID),
+   constraint FK_MA_REF_MENU foreign key (MENU_ID)
+      references MENU (ID) on delete cascade on update cascade,
+   constraint FK_MA_REF_ROLE foreign key (ROLE_ID)
+      references ROLE (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_MA_MENU_ID                                        */
+/*==============================================================*/
+create index IDX_MA_MENU_ID on MA
+(
+   MENU_ID
+);
+
+/*==============================================================*/
+/* Index: IDX_MA_ROLE_ID                                        */
+/*==============================================================*/
+create index IDX_MA_ROLE_ID on MA
+(
+   ROLE_ID
+);
+
+/*==============================================================*/
+/* Table: MAIL                                                  */
+/*==============================================================*/
+create table MAIL
+(
+   ID                   bigint not null auto_increment,
+   USER_ID              int not null,
+   SUBJECT              varchar(100),
+   CONTENT              longtext,
+   SENDER_ID            int not null,
+   SENDER               varchar(30) not null,
+   SEND_TIME            timestamp not null default CURRENT_TIMESTAMP,
+   READED               bool not null,
+   REPLIED              bool not null,
+   primary key (ID),
+   constraint FK_MAIL_REF_USER foreign key (USER_ID)
+      references USER (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_MAIL_USER_ID                                      */
+/*==============================================================*/
+create index IDX_MAIL_USER_ID on MAIL
+(
+   USER_ID
+);
+
+/*==============================================================*/
+/* Index: UK_MENU_NAME                                          */
+/*==============================================================*/
+create unique index UK_MENU_NAME on MENU
+(
+   NAME
+);
+
+/*==============================================================*/
+/* Index: IDX_MENU_PID                                          */
+/*==============================================================*/
+create index IDX_MENU_PID on MENU
+(
+   PID
+);
+
+/*==============================================================*/
+/* Table: OA                                                    */
+/*==============================================================*/
+create table OA
+(
+   ORG_ID               int not null,
+   ROLE_ID              int not null,
+   primary key (ORG_ID, ROLE_ID),
+   constraint FK_OA_REF_ORG foreign key (ORG_ID)
+      references ORG (ID) on delete cascade on update cascade,
+   constraint FK_OA_REF_ROLE foreign key (ROLE_ID)
+      references ROLE (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_OA_ORG_ID                                         */
+/*==============================================================*/
+create index IDX_OA_ORG_ID on OA
+(
+   ORG_ID
+);
+
+/*==============================================================*/
+/* Index: IDX_OA_ROLE_ID                                        */
+/*==============================================================*/
+create index IDX_OA_ROLE_ID on OA
+(
+   ROLE_ID
+);
+
+/*==============================================================*/
+/* Index: IDX_OBJ_ORG_ID                                        */
+/*==============================================================*/
+create index IDX_OBJ_ORG_ID on OBJ
+(
+   ORG_ID
+);
+
+/*==============================================================*/
+/* Index: IDX_OCCUPANCY_ROOM_ID                                 */
+/*==============================================================*/
+create index IDX_OCCUPANCY_ROOM_ID on OCCUPANCY
+(
+   ROOM_ID
+);
+
+/*==============================================================*/
+/* Table: OPTIONS                                               */
+/*==============================================================*/
+create table OPTIONS
+(
+   ID                   bigint not null auto_increment,
+   CONTENT              varchar(200) not null,
+   QUESTION_ID          bigint not null,
+   primary key (ID),
+   constraint FK_OPTIONS_REF_QUESTION foreign key (QUESTION_ID)
+      references QUESTION (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_OPTIONS_QUESTION_ID                               */
+/*==============================================================*/
+create index IDX_OPTIONS_QUESTION_ID on OPTIONS
+(
+   QUESTION_ID
+);
+
+/*==============================================================*/
+/* Index: UK_ORG_NAME                                           */
+/*==============================================================*/
+create unique index UK_ORG_NAME on ORG
+(
+   NAME
+);
+
+/*==============================================================*/
+/* Index: IDX_ORG_PID                                           */
+/*==============================================================*/
+create index IDX_ORG_PID on ORG
+(
+   PID
+);
+
+/*==============================================================*/
+/* Table: PERMISSION                                            */
+/*==============================================================*/
+create table PERMISSION
+(
+   ID                   int not null auto_increment,
+   NAME                 varchar(50) not null,
+   CODE                 varchar(200) not null,
+   LOG                  bool not null,
+   primary key (ID)
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: PA                                                    */
+/*==============================================================*/
+create table PA
+(
+   PERM_ID              int not null,
+   ROLE_ID              int not null,
+   primary key (PERM_ID, ROLE_ID),
+   constraint FK_PA_REF_PERMISSION foreign key (PERM_ID)
+      references PERMISSION (ID) on delete cascade on update cascade,
+   constraint FK_PA_REF_ROLE foreign key (ROLE_ID)
+      references ROLE (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_PA_PERM_ID                                        */
+/*==============================================================*/
+create index IDX_PA_PERM_ID on PA
+(
+   PERM_ID
+);
+
+/*==============================================================*/
+/* Index: IDX_PA_ROLE_ID                                        */
+/*==============================================================*/
+create index IDX_PA_ROLE_ID on PA
+(
+   ROLE_ID
+);
+
+/*==============================================================*/
+/* Table: PARAMETER                                             */
+/*==============================================================*/
+create table PARAMETER
+(
+   ID                   int not null auto_increment,
+   NAME                 varchar(100) not null,
+   VALUE                longtext,
+   DESCRIPTION          varchar(200),
+   primary key (ID)
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: UK_PARAMETER_NAME                                     */
+/*==============================================================*/
+create unique index UK_PARAMETER_NAME on PARAMETER
+(
+   NAME
+);
+
+/*==============================================================*/
+/* Index: UK_PERMISSION_NAME                                    */
+/*==============================================================*/
+create unique index UK_PERMISSION_NAME on PERMISSION
+(
+   NAME
+);
+
+/*==============================================================*/
+/* Index: UK_PERMISSION_CODE                                    */
+/*==============================================================*/
+create unique index UK_PERMISSION_CODE on PERMISSION
+(
+   CODE
+);
+
+/*==============================================================*/
+/* Index: IDX_QUESTION_RESOURCE_ID                              */
+/*==============================================================*/
+create index IDX_QUESTION_RESOURCE_ID on QUESTION
+(
+   RESOURCE_ID
+);
+
+/*==============================================================*/
+/* Table: RESOURCE_SET                                          */
+/*==============================================================*/
+create table RESOURCE_SET
+(
+   ID                   int not null auto_increment,
+   NAME                 varchar(10) not null,
+   CODE                 varchar(50) not null,
+   TYPE                 tinyint not null comment '1=资讯 2=图书 3=图片 4=音频 5=视频 6=问卷 7=活动 8=任务 9=驻地资源',
+   primary key (ID)
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: RA                                                    */
+/*==============================================================*/
+create table RA
+(
+   RESOURCE_ID          bigint not null,
+   RESOURCE_SET_ID      int not null,
+   primary key (RESOURCE_ID, RESOURCE_SET_ID),
+   constraint FK_RA_REF_RESOURCE foreign key (RESOURCE_ID)
+      references RESOURCE (ID) on delete cascade on update cascade,
+   constraint FK_RA_REF_RESOURCE_SET foreign key (RESOURCE_SET_ID)
+      references RESOURCE_SET (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_RA_RESOURCE_ID                                    */
+/*==============================================================*/
+create index IDX_RA_RESOURCE_ID on RA
+(
+   RESOURCE_ID
+);
+
+/*==============================================================*/
+/* Index: IDX_RA_RESOURCE_SET_ID                                */
+/*==============================================================*/
+create index IDX_RA_RESOURCE_SET_ID on RA
+(
+   RESOURCE_SET_ID
+);
+
+/*==============================================================*/
+/* Table: RATING                                                */
+/*==============================================================*/
+create table RATING
+(
+   RESOURCE_ID          bigint not null,
+   USER_ID              int not null,
+   RATE                 tinyint not null,
+   RATE_TIME            timestamp not null default CURRENT_TIMESTAMP,
+   primary key (RESOURCE_ID, USER_ID),
+   constraint FK_RATING_REF_RESOURCE foreign key (RESOURCE_ID)
+      references RESOURCE (ID) on delete cascade on update cascade,
+   constraint FK_RATING_REF_USER foreign key (USER_ID)
+      references USER (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_RATING_RESOURCE_ID                                */
+/*==============================================================*/
+create index IDX_RATING_RESOURCE_ID on RATING
+(
+   RESOURCE_ID
+);
+
+/*==============================================================*/
+/* Index: IDX_RATING_USER_ID                                    */
+/*==============================================================*/
+create index IDX_RATING_USER_ID on RATING
+(
+   USER_ID
+);
+
+/*==============================================================*/
+/* Index: UK_RESOURCE_SET_NAME                                  */
+/*==============================================================*/
+create unique index UK_RESOURCE_SET_NAME on RESOURCE_SET
+(
+   NAME
+);
+
+/*==============================================================*/
+/* Index: UK_RESOURCE_SET_CODE                                  */
+/*==============================================================*/
+create unique index UK_RESOURCE_SET_CODE on RESOURCE_SET
+(
+   CODE
+);
+
+/*==============================================================*/
+/* Index: UK_ROLE_NAME                                          */
+/*==============================================================*/
+create unique index UK_ROLE_NAME on ROLE
+(
+   NAME
+);
+
+/*==============================================================*/
+/* Index: UK_ROOM_NAME                                          */
+/*==============================================================*/
+create unique index UK_ROOM_NAME on ROOM
+(
+   NAME
+);
+
+/*==============================================================*/
+/* Table: SCORE                                                 */
+/*==============================================================*/
+create table SCORE
+(
+   ID                   bigint not null auto_increment,
+   SCORE                int not null,
+   SCORE_TIME           timestamp not null default CURRENT_TIMESTAMP,
+   CURRENT_SCORE        bigint not null,
+   RULE_NAME            varchar(50) not null,
+   REMARK               varchar(200),
+   USER_ID              int not null,
+   primary key (ID),
+   constraint FK_SCORE_REF_USER foreign key (USER_ID)
+      references USER (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_SCORE_USER_ID                                     */
+/*==============================================================*/
+create index IDX_SCORE_USER_ID on SCORE
+(
+   USER_ID
+);
+
+/*==============================================================*/
+/* Table: SCORE_RULE                                            */
+/*==============================================================*/
+create table SCORE_RULE
+(
+   ID                   int not null auto_increment,
+   NAME                 varchar(50) not null,
+   CODE                 varchar(200) not null,
+   SCORE                int,
+   FORMULA              text,
+   primary key (ID)
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: UK_SCORE_RULE_NAME                                    */
+/*==============================================================*/
+create unique index UK_SCORE_RULE_NAME on SCORE_RULE
+(
+   NAME
+);
+
+/*==============================================================*/
+/* Index: UK_SCORE_RULE_CODE                                    */
+/*==============================================================*/
+create unique index UK_SCORE_RULE_CODE on SCORE_RULE
+(
+   CODE
+);
+
+/*==============================================================*/
+/* Table: TASK                                                  */
+/*==============================================================*/
+create table TASK
+(
+   ID                   bigint not null,
+   CONTENT              longtext,
+   ANONYMOUS            bool not null,
+   REWARD               int not null,
+   OVER                 bool not null,
+   primary key (ID),
+   constraint FK_TASK_REF_RESOURCE foreign key (ID)
+      references RESOURCE (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: TASK_REPLY                                            */
+/*==============================================================*/
+create table TASK_REPLY
+(
+   ID                   bigint not null auto_increment,
+   REPLIER_ID           int not null,
+   REPLIER              varchar(30) not null,
+   REPLY_TIME           timestamp not null default CURRENT_TIMESTAMP,
+   ANSWER               longtext not null,
+   ANONYMOUS            bool not null,
+   SCORE                int not null default 0,
+   TASK_ID              bigint not null,
+   primary key (ID),
+   constraint FK_TASK_REPLY_REF_TASK foreign key (TASK_ID)
+      references TASK (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_TASK_REPLY_TASK_ID                                */
+/*==============================================================*/
+create index IDX_TASK_REPLY_TASK_ID on TASK_REPLY
+(
+   TASK_ID
+);
+
+/*==============================================================*/
+/* Table: TOPIC                                                 */
+/*==============================================================*/
+create table TOPIC
+(
+   ID                   bigint not null auto_increment,
+   TITLE                varchar(100) not null,
+   CONTENT              longtext not null,
+   USER_ID              int not null,
+   USERNAME             varchar(30) not null,
+   PUB_TIME             timestamp not null default CURRENT_TIMESTAMP,
+   IP                   varchar(40) not null,
+   STATUS               tinyint not null comment '-1=拒绝 0=待审 1=通过',
+   REPLY_COUNT          int not null,
+   LAST_REPLY_TIME      datetime,
+   CLOSE_REPLY          bool not null,
+   TOP                  tinyint not null default 0,
+   GRP_ID               bigint not null,
+   primary key (ID),
+   constraint FK_TOPIC_REF_GRP foreign key (GRP_ID)
+      references GRP (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_TOPIC                                             */
+/*==============================================================*/
+create index IDX_TOPIC on TOPIC
+(
+   GRP_ID,
+   TOP,
+   LAST_REPLY_TIME
+);
+
+/*==============================================================*/
+/* Table: TOPIC_REPLY                                           */
+/*==============================================================*/
+create table TOPIC_REPLY
+(
+   ID                   bigint not null auto_increment,
+   CONTENT              longtext not null,
+   USER_ID              int not null,
+   USERNAME             varchar(30) not null,
+   PUB_TIME             timestamp not null default CURRENT_TIMESTAMP,
+   IP                   varchar(40) not null,
+   STATUS               tinyint not null comment '-1=拒绝 0=待审 1=通过',
+   TOPIC_ID             bigint not null,
+   primary key (ID),
+   constraint FK_TOPIC_REPLY_REF_TOPIC foreign key (TOPIC_ID)
+      references TOPIC (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_TOPIC_REPLY                                       */
+/*==============================================================*/
+create index IDX_TOPIC_REPLY on TOPIC_REPLY
+(
+   TOPIC_ID,
+   PUB_TIME
+);
+
+/*==============================================================*/
+/* Table: UA                                                    */
+/*==============================================================*/
+create table UA
+(
+   USER_ID              int not null,
+   ROLE_ID              int not null,
+   primary key (USER_ID, ROLE_ID),
+   constraint FK_UA_REF_USER foreign key (USER_ID)
+      references USER (ID) on delete cascade on update cascade,
+   constraint FK_UA_REF_ROLE foreign key (ROLE_ID)
+      references ROLE (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_UA_USER_ID                                        */
+/*==============================================================*/
+create index IDX_UA_USER_ID on UA
+(
+   USER_ID
+);
+
+/*==============================================================*/
+/* Index: IDX_UA_ROLE_ID                                        */
+/*==============================================================*/
+create index IDX_UA_ROLE_ID on UA
+(
+   ROLE_ID
+);
+
+/*==============================================================*/
+/* Index: UK_USER_USERNAME                                      */
+/*==============================================================*/
+create unique index UK_USER_USERNAME on USER
+(
+   USERNAME
+);
+
+/*==============================================================*/
+/* Index: UK_USER_EMAIL                                         */
+/*==============================================================*/
+create unique index UK_USER_EMAIL on USER
+(
+   EMAIL
+);
+
+/*==============================================================*/
+/* Index: UK_USER_MOBILE                                        */
+/*==============================================================*/
+create unique index UK_USER_MOBILE on USER
+(
+   MOBILE
+);
+
+/*==============================================================*/
+/* Index: IDX_USER_ORG_ID                                       */
+/*==============================================================*/
+create index IDX_USER_ORG_ID on USER
+(
+   ORG_ID
+);
+
+/*==============================================================*/
+/* Table: USER_EDU                                              */
+/*==============================================================*/
+create table USER_EDU
+(
+   ID                   bigint not null auto_increment,
+   EDUCATION            tinyint not null comment '1=研究生 2=大学 3=大专 4=中等专业学校 5=技工学校 6=高中 7=初中 8=小学 9=文盲半文盲',
+   ENROLLMENT_DATE      date not null,
+   GRADUATION_DATE      date not null,
+   SCHOOL               varchar(100) not null,
+   STATUS               tinyint not null comment '1=毕业 2=肄业 3=结业 4=在训 5=未完成',
+   LENGTH               tinyint not null,
+   MAJOR                varchar(30),
+   DEGREE               varchar(10),
+   GRANT_DATE           date,
+   GRANT_ORG            varchar(100),
+   FILL_TIME            timestamp not null default CURRENT_TIMESTAMP,
+   USER_ID              int not null,
+   primary key (ID),
+   constraint FK_USER_EDU_REF_USER foreign key (USER_ID)
+      references USER (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_USER_EDU_USER_ID                                  */
+/*==============================================================*/
+create index IDX_USER_EDU_USER_ID on USER_EDU
+(
+   USER_ID
+);
+
+/*==============================================================*/
+/* Table: USER_FAMILY                                           */
+/*==============================================================*/
+create table USER_FAMILY
+(
+   ID                   bigint not null auto_increment,
+   NAME                 varchar(30) not null,
+   RELATION             varchar(10) not null,
+   BIRTHDAY             date,
+   POLITICS             varchar(10),
+   ORG_JOB              varchar(100),
+   HOME_ADDR            varchar(100),
+   TEL                  varchar(20),
+   FILL_TIME            timestamp not null default CURRENT_TIMESTAMP,
+   USER_ID              int not null,
+   primary key (ID),
+   constraint FK_USER_FAMILY_REF_USER foreign key (USER_ID)
+      references USER (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_USER_FAMILY_USER_ID                               */
+/*==============================================================*/
+create index IDX_USER_FAMILY_USER_ID on USER_FAMILY
+(
+   USER_ID
+);
+
+/*==============================================================*/
+/* Table: USER_INFO                                             */
+/*==============================================================*/
+create table USER_INFO
+(
+   USER_ID              int not null,
+   REAL_NAME            varchar(30) not null,
+   GENDER               tinyint(1) not null comment '0=女 1=男',
+   NATION               varchar(20) not null,
+   BIRTHDAY             date not null,
+   ID_CARD              varchar(18) not null,
+   MARRIAGE             tinyint(1) not null default 0 comment '1=单身 2=已婚 3=离异 4=丧偶',
+   NATIVE_PLACE         varchar(20) not null,
+   HOUSEHOLD            tinyint(1) default 1 comment '1=非农业户口 2=农业户口',
+   HEALTH               varchar(30) comment '选项：健康、一般、自填',
+   JOB_TIME             date,
+   BRANCH               varchar(100) not null,
+   PARTY_STATUS         tinyint(1) not null comment '0=群众 1=预备党员 2=正式党员',
+   IDENTIFICATION       tinyint not null,
+   MAJOR                varchar(30),
+   EDUCATION            tinyint not null comment '1=研究生 2=大学 3=大专 4=中等专业学校 5=技工学校 6=高中 7=初中 8=小学 9=文盲半文盲',
+   TITLE                varchar(20),
+   FEATURE              varchar(100),
+   SECOND_PARTY         varchar(30),
+   SECOND_JOIN_TIME     date,
+   GOING                tinyint comment '1=企业一线 2=农业一线 3=教学一线 4=科研一线 5=机关一线 6=连队一线 7=其他一线',
+   PERSONNEL            varchar(100),
+   PARTY_DUE            varchar(30),
+   HOME_ADDR            varchar(100),
+   HOME_ZIPCODE         varchar(10),
+   HOUSEHOLD_ADDR       varchar(100),
+   HOUSEHOLD_ZIPCODE    varchar(10),
+   HOME_TEL             varchar(20),
+   OFFICE_TEL           varchar(20),
+   FAX                  varchar(20),
+   STRATUM              tinyint,
+   VOLUNTEER            varchar(100),
+   FILL_TIME            timestamp not null default CURRENT_TIMESTAMP,
+   primary key (USER_ID),
+   constraint FK_USER_INFO_REF_USER foreign key (USER_ID)
+      references USER (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: USER_ORDER                                            */
+/*==============================================================*/
+create table USER_ORDER
+(
+   ID                   bigint not null,
+   USER_ID              int not null,
+   PRODUCT_NAME         varchar(200) not null,
+   PRODUCT_DESC         varchar(2000),
+   PRICE                bigint not null,
+   CREATE_TIME          timestamp not null default CURRENT_TIMESTAMP,
+   STATUS               tinyint not null default 0 comment '0=未支付 1=已支付',
+   PAY_AMOUNT           bigint,
+   PAY_TIME             datetime,
+   primary key (ID),
+   constraint FK_USER_ORDER_REF_USER foreign key (USER_ID)
+      references USER (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_USER_ORDER_USER_ID                                */
+/*==============================================================*/
+create index IDX_USER_ORDER_USER_ID on USER_ORDER
+(
+   USER_ID
+);
+
+/*==============================================================*/
+/* Table: USER_PARTY                                            */
+/*==============================================================*/
+create table USER_PARTY
+(
+   USER_ID              int not null,
+   JOIN_DATE            date not null,
+   POSITIVE_DATE        date not null,
+   BEFORE_STATUS        varchar(50),
+   LENGTHEN             smallint,
+   JOIN_EDU             tinyint comment '1=研究生 2=大学 3=大专 4=中等专业学校 5=技工学校 6=高中 7=初中 8=小学 9=文盲半文盲',
+   JOIN_JOB             varchar(100),
+   STRATUM              tinyint,
+   GOING                tinyint comment '1=企业一线 2=农业一线 3=教学一线 4=科研一线 5=机关一线 6=连队一线 7=其他一线',
+   FILL_TIME            timestamp not null default CURRENT_TIMESTAMP,
+   primary key (USER_ID),
+   constraint FK_USER_PARTY_REF_USER foreign key (USER_ID)
+      references USER (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Table: USER_PARTY_JOB                                        */
+/*==============================================================*/
+create table USER_PARTY_JOB
+(
+   ID                   bigint not null auto_increment,
+   PARTY_NAME           varchar(30) not null,
+   JOB_TITLE            varchar(4) not null,
+   FULL_TIME            bool not null,
+   START_DATE           date,
+   STATUS               varchar(10),
+   WAY                  tinyint(1) comment '1=党委决定 2=会议选举',
+   FILL_TIME            timestamp not null default CURRENT_TIMESTAMP,
+   USER_ID              int not null,
+   primary key (ID),
+   constraint FK_USER_PARTY_JOB_REF_USER foreign key (USER_ID)
+      references USER (ID) on delete cascade on update cascade
+)
+engine = InnoDB;
+
+/*==============================================================*/
+/* Index: IDX_USER_PARTY_JOB_USER_ID                            */
+/*==============================================================*/
+create index IDX_USER_PARTY_JOB_USER_ID on USER_PARTY_JOB
+(
+   USER_ID
+);
+

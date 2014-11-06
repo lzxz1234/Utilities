@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}BASE64 编码解码{% endblock %}
+
+{% block meta %}
+    <meta name="keywords" content="Base64 在线 编码 解码" />
+    <meta name="description" content="Base64 在线 编码 解码" />
+    <meta name="description" content="">
+    <meta name="author" content="">
+{% endblock %}
+  
+{% block content %}
+    <div class="well">
+        <legend>BASE64 编码解码</legend>
+        <div>
+           <textarea name="source" rows="10" id="source" placeholder="明文" spellcheck="false"  class="input-block-level"></textarea>
+            <div>
+                <div class="btn btn-primary">
+                   <span onclick="javascript:base64_encode();">
+                   <strong>BASE64 编码</strong> <i class="icon-arrow-down"></i></span>
+                </div>
+                <div class="btn ">
+                   <span onclick="javascript:base64_decode();">
+                   <strong>BASE64 解码 </strong><i class="icon-arrow-up"></i></span> 
+                </div>
+            </div>
+            <textarea name="result" rows="10" id="result" placeholder="BASE 64" spellcheck="false"  class="input-block-level"></textarea>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+<script src="/static/js/CryptoJS/core.js"></script>
+<script src="/static/js/CryptoJS/enc-base64.js"></script>
+<script type="text/javascript" type="text/javascript">
+function base64_encode(){
+    var str=CryptoJS.enc.Utf8.parse($("#source").val());
+    var base64=CryptoJS.enc.Base64.stringify(str);
+    $("#result").val(base64);
+}
+function base64_decode(){
+    var words  = CryptoJS.enc.Base64.parse($("#result").val());
+    $("#source").val(words.toString(CryptoJS.enc.Utf8));
+}
+</script>
+{% endblock %}

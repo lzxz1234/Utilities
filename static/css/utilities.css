@@ -1,0 +1,57 @@
+/** 主界面 */
+#wrap {
+  position: relative;
+  max-width: 888px;
+  padding-top: 40px;
+}
+html, body {
+  min-height:100%;
+}
+textarea {
+    resize: none;
+}
+/** 下方信息栏 */
+div.footer {
+  max-width: 888px;
+  border-top: 1px solid #DCDCDC;
+}
+div.footer div.content_area {
+  margin: 5px 0;
+}
+div.footer div.content_area div.links_left {
+  line-height: 10px;
+  float: left;
+}
+div.footer div.content_area div.links_left ul.row-fluid {
+  margin: 0px;
+}
+div.footer div.content_area div.links_left ul.row-fluid li {
+  color: #8B8B8B;
+  text-align: left;
+  font-weight: 600;
+  font-size: 15px;
+  float: left;
+  line-height: 24px;
+  list-style: none;
+  width: 18%;
+}
+div.footer div.content_area div.links_left ul.row-fluid li ul {
+  margin-left: 0px;
+}
+div.footer div.content_area div.links_left ul.row-fluid li ul li {
+  width: 100%;
+  clear: both;
+  font-size: 12px;
+  font-weight: 500;
+  list-style: none;
+  text-align: left;
+  line-height: 26px;
+}
+div.footer div.content_area div.copy_right {
+  float: right;
+}
+div.footer div.content_area div.copy_right li {
+  list-style: none;
+  text-align: right;
+  color: #9F9F9F;
+}

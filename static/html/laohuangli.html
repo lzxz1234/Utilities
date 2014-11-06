@@ -1,0 +1,146 @@
+<style>
+.rightcorner * {
+    font-family:"Consolas","Microsoft Yahei", Arial, sans-serif;
+}
+.rightcorner {
+    width: 300px;
+    position: absolute;
+    right:6px;
+    bottom:6px;
+    display: none;
+    padding: 5px 5px 5px 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    border-color:black;
+}
+.rightcorner>.title {
+    color: #bbb;
+    font-weight: bold;
+    margin-bottom: 5px;
+    background: #555;
+    padding: 5px 15px;
+}
+.date{
+    font-size:14pt;
+    font-weight: bold;
+    line-height: 25pt;
+    text-align: center;
+}
+.split, .clear {
+    clear: both;
+    height: 1px;
+    overflow-y: hidden;
+}
+.good, .bad {
+    clear: both;
+    margin-top: 5px;
+    position: relative;
+}
+.good .title, .bad .title {
+    float: left;
+    width: 100px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 30pt;
+    position:absolute;
+    top:0;
+    bottom:0;
+}
+.good .title>table, .bad .title>table {
+    position:absolute;
+    width:100%;
+    height:100%;
+    border:none;
+}
+.good .title {
+    background: yellow;
+}
+.bad .title {
+    background: red;
+    color: #fff;
+}
+.good .content, .bad .content {
+    margin-left: 120px;
+    padding-top: 1px;
+    font-size:15pt;
+}
+.good {
+    background: #f4ffaa;
+}
+.bad {
+    background: #ffddd3;
+}
+.content ul {
+    list-style: none;
+    margin:5px 0 0;
+    padding:0;
+}
+.content ul li {
+    line-height:150%;
+    font-size: 14pt;
+    font-weight: bold;
+    color: #444;
+}
+.content ul li div.description {
+    font-size: 10pt;
+    font-weight: normal;
+    margin-left: 15px;
+    color: #777;
+    line-height: 110%;
+    margin-bottom: 5px;
+}
+.direction {
+    font-size: 11pt;
+    margin-top: 7px;
+    font-weight: bold;
+}
+.direction span {
+    color:#4a4;
+}
+</style>
+<div class="rightcorner">
+    <div class="date">
+    </div>
+    <div class="good">
+        <div class="title">
+            <table>
+                <tr><td>宜</td></tr>
+            </table>
+        </div>
+        <div class="content">
+            <ul></ul>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="split"></div>
+    <div class="bad">
+        <div class="title">
+            <table>
+                <tr><td>不宜</td></tr>
+            </table>
+        </div>
+        <div class="content">
+            <ul></ul>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="split"></div>
+    <div class="direction">
+        <strong>座位朝向：</strong>面向<span class="direction_value"></span>写程序，BUG最少
+    </div>
+    <div class="direction">
+        <strong>今日宜食：</strong><span class="eat_value"></span>
+        <strong>今日宜饮：</strong><span class="drink_value"></span>
+    </div>
+    <div class="direction">
+        <strong>今日宜穿：</strong><span class="clothingColor_value"></span><span class="clothing_value"></span>搭配<span class="clothingColor_value2"></span><span class="clothing_value2"></span>
+    </div>
+    <div class="direction">
+        <strong>今日宜行：</strong><span class="vehicle"></span>去<span class="place"></span>
+    </div>
+</div>
+<script type="text/javascript" src="/static/js/laohuangli.js"></script>

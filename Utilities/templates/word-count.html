@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}字数统计工具{% endblock %}
+
+{% block meta %}
+  <meta name="keywords" content="字数 在线 统计" />
+  <meta name="description" content="字数 在线 统计" />  
+{% endblock %}
+
+{% block content %}
+<div class="well">
+    <div class="row-fluid">
+        <div class="span12">
+            <legend>字数统计工具</legend>
+            <div class="row-fluid">
+                <div class="span6 well">
+                <form>
+                    <textarea id="id_content" rows="15" name="p" placeholder="输入字段内容" spellcheck="false" class="input-block-level"></textarea>
+                    <span onclick="javascript: calc();" class="btn btn-primary">统计</span>
+                    <span onclick="javascript: $('#id_content').val('');" class="btn btn-primary">清空数据</span>
+                </form>
+                </div>
+                <div id="qrfile" class="span6 well">
+                    <legend>字符统计结果</legend>
+				    <dl id="calc-result" class="dl-horizontal">
+				       <dt>字符总数：</dt><dd id="id_total">0 个</dd>
+				       <dt>中文字符总数：</dt><dd id="id_c_total">0 个</dd>
+				       <dt>中文标点总数：</dt><dd id="id_c_punctuation">0 个</dd>
+				       <dt>英文字符总数：</dt><dd id="id_e_total">0 个</dd>
+				       <dt>英文标点总数：</dt><dd id="id_e_punctuation">0 个</dd>
+				       <dt>数字字符总数：</dt><dd id="id_n_total">0 个</dd>
+				       <dt>英文单词总数：</dt><dd id="id_e_words">0 个</dd>
+				       <dt>数据单词总数：</dt><dd id="id_n_words">0 个</dd>
+				       <dt>行（段）单词总数：</dt><dd id="id_part">0 个</dd>
+				    </dl>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+function calc() {
+	var str = $('#id_content').val().replace(/\r\n/g, "\n");
+    var t_str = str.replace(/\n/g, '');
+    var w_c_str = str.match(/[\u4e00-\u9fa5]/g)||[];
+    var w_e_str = str.match(/\b\w+\b/g)||[];
+    var w_n_str = str.match(/\b\d+\b/g)||[];
+    var e_p = t_str.match(/[|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\+|\=|\||\\|\[|\]|\{|\}|\;|\:|\"|\'|\,|\<|\.|\>|\/|\?]/g)||[];
+    
+    var sTotal = 0;
+    for(var i = 0; i < t_str.length; i++){
+        var c = t_str.charAt(i);
+        if (c.match(/[^\x00-\xff]/))sTotal ++;
+    }
+    
+    var e = t_str.match(/[A-Za-z]/g)||[];
+    var eTotal = e.length;
+
+    var n = t_str.match(/[0-9]/g)||[];
+    var nTotal = n.length;
+
+    var part = 0;
+    var s_ma = str.split("\n");
+    for(var i = 0; i < s_ma.length; i++){
+        if(s_ma[i].length > 0) part++;
+    }
+
+    $('#id_total').html(t_str.length + " 个");
+    $('#id_c_total').html(w_c_str.length + " 个");
+    $('#id_c_punctuation').html((sTotal - w_c_str.length) + " 个");
+    $('#id_e_total').html(eTotal + " 个");
+    $('#id_e_punctuation').html(e_p.length + " 个");
+    $('#id_e_words').html((w_e_str.length - w_n_str.length) + " 个");
+    $('#id_n_words').html(w_n_str.length + " 个");
+    $('#id_n_total').html(nTotal + " 个");
+    $('#id_part').html(part + " 个");
+}
+$(document).ready(function() {
+});
+</script>
+{% endblock %}

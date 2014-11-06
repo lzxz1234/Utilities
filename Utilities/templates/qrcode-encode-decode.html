@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}二维码编码解码工具{% endblock %}
+
+{% block meta %}
+  <meta name="keywords" content="二维码 在线 生成 解码" />
+  <meta name="description" content="二维码 在线 生成 解码" />  
+{% endblock %}
+
+{% block content %}
+<div class="well">
+	<div class="row-fluid">
+	    <div class="span12">
+			<legend>二维码制作 / 解码工具<small>(基于HTML5，推荐Chrome或Firefox)</small></legend>
+			<div class="row-fluid">
+			    <div class="span6 well">
+			        <form action="/qrcode" method="POST" target="blank" onsubmit="javascript:return check('请输入文本或URL！！');">
+			            {% csrf_token %}
+				        <textarea id="content" rows="15" name="p" placeholder="输入URL或文本，点击生成二维码即可，也可将图片直接拖至右侧图片位置解码" spellcheck="false" class="input-block-level"></textarea>
+			            <span onclick="javascript: generateqrcode();" class="btn btn-primary">生成二维码</span>
+			            <button type="submit" class="btn btn-primary">新窗口中生成</button>
+			            <!-- span onclick="javascript: decode();" class="btn btn-inverse">二维解码</span -->
+			        </form>
+			    </div>
+			    <div id="qrfile" class="span6 well">
+			        <img id="qrcode" alt="二维码" src="/qrcode?p=http://utilities.duapp.com/func/qrcode-encode-decode.html" class="img-polaroid">
+			    </div>
+			</div>
+	    </div>
+	</div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="/static/js/qrcode/grid.js"></script>
+<script type="text/javascript" src="/static/js/qrcode/version.js"></script>
+<script type="text/javascript" src="/static/js/qrcode/detector.js"></script>
+<script type="text/javascript" src="/static/js/qrcode/formatinf.js"></script>
+<script type="text/javascript" src="/static/js/qrcode/errorlevel.js"></script>
+<script type="text/javascript" src="/static/js/qrcode/bitmat.js"></script>
+<script type="text/javascript" src="/static/js/qrcode/datablock.js"></script>
+<script type="text/javascript" src="/static/js/qrcode/bmparser.js"></script>
+<script type="text/javascript" src="/static/js/qrcode/datamask.js"></script>
+<script type="text/javascript" src="/static/js/qrcode/rsdecoder.js"></script>
+<script type="text/javascript" src="/static/js/qrcode/gf256poly.js"></script>
+<script type="text/javascript" src="/static/js/qrcode/gf256.js"></script>
+<script type="text/javascript" src="/static/js/qrcode/decoder.js"></script>
+<script type="text/javascript" src="/static/js/qrcode/qrcode.js"></script>
+<script type="text/javascript" src="/static/js/qrcode/findpat.js"></script>
+<script type="text/javascript" src="/static/js/qrcode/alignpat.js"></script>
+<script type="text/javascript" src="/static/js/qrcode/databr.js"></script>
+<script type="text/javascript">
+function dragenter(e) {
+  e.stopPropagation();
+  e.preventDefault();
+}
+function dragover(e) {
+  e.stopPropagation();
+  e.preventDefault();
+}
+function drop(e) {
+  e.stopPropagation();
+  e.preventDefault();
+
+  var dt = e.dataTransfer || (e.originalEvent && e.originalEvent.dataTransfer);
+  var files = e.target.files || (dt && dt.files);
+  if(files.length>0) {
+    handleFiles(files);
+  } else if(dt.getData('URL')) {
+    qrcode.decode(dt.getData('URL'));
+  }
+}
+function handleFiles(f) {
+    var o=[];
+    $.each(f, function(i, n) {
+        var reader = new FileReader();
+        reader.onload = (function(theFile) {
+            return function(e) {
+	            $("#qrcode").attr("src", e.target.result); 
+	            qrcode.decode(e.target.result);
+            }; 
+        })(n);
+        reader.readAsDataURL(n); 
+    });
+}
+function check(msg) {
+	str = $("#content").val();
+    if(str == '') {
+        alert(msg);
+        return false;
+    }
+    return str;
+}
+function generateqrcode(){
+	str = check("请输入文本或URL！！");
+	if(str) $("#qrcode").attr("src", "/qrcode?p=" + str);
+}
+function decode() {
+	str = check("请输入图片URL地址！！");
+	if(str) {
+		qrcode.decode(str);
+	}
+}
+$(document).ready(function() {
+    qrcode.callback = function(data) {
+    	$("#content").val(data);
+    };
+    $("#qrfile").bind("drop", drop);
+    $("#qrfile").bind("dragover", dragover);
+    $("#qrfile").bind("dragenter", dragenter);
+});
+</script>
+{% endblock %}

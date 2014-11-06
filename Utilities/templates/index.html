@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Utilities{% endblock %}
+
+{% block meta %}
+<meta name="keywords" content="JavaScript 工具" />
+<meta name="description" content="JavaScript 工具集" />
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid">
+    <div id="toollist" class="span12">
+    </div>
+</div>
+{% endblock %}
+
+{% block footer-left-column %}
+<li>
+    <h5>设置</h5>
+    <ul>
+        <li>
+            <a id="setindex" href="#" onclick="javascript: setindex();">自定义首页</a>
+            <a id="completesetindex" href="#" class="hidden" onclick="javascript: completesetindex();">完成</a>
+        </li>
+        <li><a id="setdefault" href="#" onclick="javascript: $.removeCookie('toollists');location.reload();">重置首页</a></li>
+    </ul>
+</li>
+{% endblock %}
+
+{% block js %}
+<script src="/static/js/jquery-ui/jquery.ui.core.js"></script>
+<script src="/static/js/jquery-ui/jquery.ui.widget.js"></script>
+<script src="/static/js/jquery-ui/jquery.ui.mouse.js"></script>
+<script src="/static/js/jquery-ui/jquery.ui.sortable.js"></script>
+<script src="/static/js/jquery-cookie.js"></script>
+<script type="text/javascript">
+var DEFAULT_ALL_TOOLS = {"content":[{"id" : "1", "name" : "手册", "tools" : [{"id" : "1", "name" : "正则表达式30分钟入门", "href" : "/func/regex-getting-start-in-30-minutes.html"}, 
+                                                                  {"id" : "2", "name" : "RGB 颜色参考", "href" : "/func/rgb-reference.html"},
+                                                                  {"id" : "14", "name" : "Mybatis中文文档", "href" : "http://mybatis.github.io/mybatis-3/zh/index.html"},
+                                                                  {"id" : "15", "name" : "BootStrap中文文档", "href" : "http://www.bootcss.com/"}]},
+                                      {"id" : "3", "name" : "格式化", "tools" : [{"id" : "3", "name" : "XML 格式化 / 校验", "href" : "/func/xml-highlight-format.html"}, 
+                                                                  {"id" : "4", "name" : "JSON 格式化", "href" : "/func/json-colorful-format.html"}, 
+                                                                  {"id" : "5", "name" : "Javascript 格式化", "href" : "/func/js-colorful-format.html"},
+                                                                  {"id" : "6", "name" : "HTML 格式化 / 校验", "href" : "/func/html-format-validate.html"}]},
+                                      {"id" : "5", "name" : "加密 / 解密 / 压缩", "tools" : [{"id" : "6", "name" : "中文转码", "href" : "/func/chinese-encode-decode.html"}, 
+                                                                  {"id" : "7", "name" : "BASE64 编码解码", "href" : "/func/base64-encode-decode.html"},
+                                                                  {"id" : "8", "name" : "Javascript 在线压缩", "href" : "/func/js-compress.html"},
+                                                                  {"id" : "9", "name" : "JSON 压缩 / 转义", "href" : "/func/json-compress-transfer.html"}]},
+                                      {"id" : "6", "name" : "其他", "tools" : [{"id" : "10", "name" : "代码对比 / 归并工具", "href" : "/func/text-compare.html"}, 
+                                                                  {"id" : "10", "name" : "基于行的文本对比工具", "href" : "/func/line-based-text-compare.html"}, 
+                                                                  {"id" : "11", "name" : "正则表达式测试", "href" : "/func/regex-test.html"},
+                                                                  {"id" : "12", "name" : "二维码生成 / 解码工具", "href" : "/func/qrcode-encode-decode.html"},
+                                                                  {"id" : "13", "name" : "本机IP查询 / IP 信息查询", "href" : "/ip?web"},
+                                                                  {"id" : "14", "name" : "字符数目统计", "href" : "/func/word-count.html"}]}]};
+
+$(document).ready(function() {
+	if($.cookie('toollists')) {
+		refreshIndex($.parseJSON($.cookie('toollists')));
+	} else {
+		refreshIndex(DEFAULT_ALL_TOOLS);
+	}
+	$("#toollist ul").disableSelection();
+	
+	$("#laohuangli").toggle(function() {
+        $.get("/static/html/laohuangli.html", function(content) {
+            $("body").append(content);
+            $(".rightcorner").fadeIn(1000);
+        });
+    }, function() {
+        $(".rightcorner").remove();
+    });
+});
+
+function completesetindex() {
+	$("#completesetindex").addClass("hidden");
+    $("#setindex").removeClass("hidden");
+    
+	$("#toollist ul>li>div").css("cursor", "auto");
+	$("#toollist ul>li>div>i").addClass("hidden");
+	refreshCookie();
+};
+
+function setindex() {
+	showMsg("由于各种原因，服务器端无数据库服务，故全部设置仅保存在客户端，敬请注意，谢谢!!!");
+	
+	$("#toollist ul").sortable({
+	    connectWith: ".connectedSortable"
+	});
+
+	$("#completesetindex").removeClass("hidden");
+	$("#setindex").addClass("hidden");
+	
+	$("#toollist ul>li>div").css("cursor", "move");
+	$("#toollist ul>li>div>i").removeClass("hidden");
+};
+function refreshCookie() {
+	$.cookie('toollists', index2Json());
+};
+function index2Json() {
+	var json = '{"content":[';
+	
+	$.each($("#toollist>div"), function(i, v) {
+		json = json + '{"id":"' + $(v).find("ul").attr("id").substr(3) + '","name":"' +  $(v).find("div").html() + '","tools":[';
+		
+		$.each($(v).find("ul").children("li").children("div"), function(ii, vv) {
+			json = json + '{"id":"' + $(vv).attr("id").substr(5) + '","name":"' +  $(vv).find("a").html() + '","href":"' + $(vv).find("a").attr("href") + '"},';
+		});
+		if(json.charAt(json.length - 1) == ',') json = json.substring(0, json.length - 1);
+		json = json + ']},';
+	});
+	if(json.charAt(json.length - 1) == ',') json = json.substring(0, json.length - 1);
+	
+	return json + "]}";
+};
+function refreshIndex(allTools) {
+	$.each(allTools.content, function(i, v) {
+        $("#toollist").append("<div class=\"span3\">" + 
+                "<div class=\"alert alert-success\" style=\"margin-bottom:5px;\">" + v.name + "</div>" + 
+                "<ul id=\"ul_" + v.id + "\" class=\"nav nav-tabs nav-stacked connectedSortable\">");
+        
+        $.each(v.tools, function(index, tool) {
+            $("#ul_" + v.id).append("<li><div id=\"tool_" + tool.id + "\" ><a tabindex=\"-1\" href=\"" + tool.href + "\">" + tool.name + "</a><i onclick='javascript : $(this).closest(\"li\").remove();' style='cursor:pointer' class='hidden icon-remove-sign pull-right'></i></div></li>");
+        });
+        
+        $("#toollist").append("</ul></div>");
+    });
+};
+
+function showMsg(msg) {
+	$(".autoremove").remove();
+	$("#navbar").after("<div class=\"autoremove alert alert-error\">" + msg + "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button></div>");
+}
+
+</script>
+{% endblock %}

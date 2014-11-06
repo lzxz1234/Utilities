@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}IP 地址信息页{% endblock %}
+
+{% block meta %}
+  <meta name="keywords" content="IP 信息" />
+  <meta name="description" content="IP 信息" />  
+{% endblock %}
+
+{% block content %}
+<div class="well">
+    <legend>IP 详细信息列表<form class="pull-right input-prepend input-append">
+                        <span class="add-on">定址查询</span>
+                        <input tabindex="1" id="ip" name="ip" type="text" autocomplete="off" class="input-small">
+                        <button class="btn" onclick="javascript: loadip($('#ip').val()); return false;">查询</button>
+                    </form></legend>
+	<dl id="ipinfo" class="dl-horizontal">
+	   <dt>IP 地址 </dt><dd>{{ ip }}</dd>
+       <dt>国家</dt><dd></dd>
+       <dt>省份</dt><dd></dd>
+       <dt>城市</dt><dd></dd>
+       <dt>区</dt><dd></dd>
+       <dt>ISP</dt><dd></dd>
+       <dt>类型</dt><dd></dd>
+       <dt>其他</dt><dd></dd>
+	</dl>
+	<legend>使用说明：</legend>
+	Linux 下执行： <code>curl http://utilities.duapp.com/ip</code> 即可查询 ip 地址，查询详细信息请用浏览器打开本页面
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+$(document).ready(function() {
+	loadip('{{ ip }}');
+});
+function loadip(ip) {
+	$.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip='+ip, function(_result){
+		var info = "<dt>IP 地址 </dt><dd>" + ip + "</dd>";
+	    if (remote_ip_info.ret == '1'){
+	    	info += "<dt>国家</dt><dd>" + remote_ip_info.country + "</dd>";
+	    	info += "<dt>省份</dt><dd>" + remote_ip_info.province + "</dd>";
+	    	info += "<dt>城市</dt><dd>" + remote_ip_info.city + "</dd>";
+	    	info += "<dt>区</dt><dd>" + remote_ip_info.district + "</dd>";
+	    	info += "<dt>ISP</dt><dd>" + remote_ip_info.isp + "</dd>";
+	    	info += "<dt>类型</dt><dd>" + remote_ip_info.type + "</dd>";
+	    	info += "<dt>其他</dt><dd>" + remote_ip_info.desc + "</dd>";
+	    	$("#ipinfo").html(info);
+	    } else {
+	        alert('没有找到匹配的 IP 地址信息！');
+	    }
+	});
+}
+</script>
+{% endblock %}

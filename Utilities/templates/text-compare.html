@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}代码对比 / 归并工具{% endblock %}
+
+{% block meta %}
+<meta name="keywords" content="代码 文本 归并 对比 比较 在线 " />
+<meta name="description" content="代码对比归并工具 在线 " />
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="/static/css/codemirror.css">
+<link rel="stylesheet" type="text/css" href="/static/css/mergely.css">
+{% endblock %}
+  
+{% block content %}
+<div class="well">
+    <legend>代码对比 / 归并工具</legend>
+    <div id="diff" class="toolUsing"></div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="/static/js/codemirror/codemirror.js"></script>
+<script src="/static/js/mergely.js"></script>
+<script>
+$(document).ready(function() {
+    $('#diff').mergely({
+        cmsettings: {
+            readOnly: false,
+            lineNumbers: true
+        }
+    });
+});
+</script>
+{% endblock %}

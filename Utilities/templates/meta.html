@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}META 信息详情页{% endblock %}
+
+{% block content %}
+<div class="well">
+	<table class="table table-striped">
+	{% for k,v in values%}
+	    <tr>
+	        <td>{{k}}</td>
+	        <td>{{v}}</td>
+	    </tr>
+	{% endfor %}
+	</table>
+</div>
+{% endblock %}

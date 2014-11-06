@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}更新日志{% endblock %}
+
+{% block meta %}
+  <meta name="keywords" content="更新日志" />
+  <meta name="description" content="更新日志" />  
+{% endblock %}
+
+{% block content %}
+<div class="well">
+	<legend>更新日志</legend>
+    <blockquote><h5>2013-12-19</h5>添加字数统计功能。</blockquote>
+    <blockquote><h5>2013-04-15</h5>添加 IP 地址查询功能，默认查本机 IP 信息，也可查任意 IP地址 信息。</blockquote>
+    <blockquote><h5>2013-04-12</h5>更新二维码功能，生成采用<a href="https://github.com/lincolnloop/python-qrcode" target="blank"><code>qrcode</code></a>，解析采用<a href="https://github.com/LazarSoft/jsqrcode" target="blank"><code>jsqrcode</code></a>，部分识别有问题，待修正。</blockquote>
+    <blockquote><h5>2013-04-01</h5>测试1.0上线</blockquote>
+</div>
+{% endblock %}

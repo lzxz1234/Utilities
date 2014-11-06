@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}JSON Compress And Transfer{% endblock %}
+
+{% block meta %}
+	<meta name="keywords" content="Json 压缩 转换 在线 " />
+	<meta name="description" content="Json 压缩 转换 在线 " />
+{% endblock %}
+
+{% block content %}
+          <div class="well">
+              <legend>Json Compress Transfer</legend>
+              
+              <form id="JSONVYasuo" method="post" action="." name="JSONVYasuo">
+                  <input type="hidden" id="reformat" value="1" />
+                  <input type="hidden" id="compress" value="0" />
+                      <textarea id="json_input" rows="25" name="json_input"  class="input-block-level" spellcheck="false" placeholder="Enter JSON to Transfer"></textarea>
+                  <div class="">
+                      <input type="button" class="btn btn-primary" value="Compress" onclick="yasuo(1);"/>
+                      <input type="button" class="btn btn-primary" value="Transfer" onclick="yasuo(2);"/>
+                      <input type="button" class="btn btn-primary" value="Compress And Transfer" onclick="yasuo(3);"/>
+                      <input type="button" class="btn btn-primary" value="Remove Transfer" onclick="yasuo(4);"/>
+                  </div>
+              </form>
+           </div>
+{% endblock %}
+
+{% block js %}
+<script>
+    /**
+    1 压缩
+    2 转义
+    3 压缩转义
+    */
+    function yasuo(ii){
+         var txtA = document.getElementById("json_input");
+         var text = txtA.value;
+            if(ii==1||ii==3){
+                 text = text.split("\n").join(" ");
+                var t = [];
+                var inString = false;
+                for (var i = 0, len = text.length; i < len; i++) {
+                    var c = text.charAt(i);
+                    if (inString && c === inString) {
+                        // TODO: \\"
+                        if (text.charAt(i - 1) !== '\\') {
+                            inString = false;
+                        }
+                    } else if (!inString && (c === '"' || c === "'")) {
+                        inString = c;
+                    } else if (!inString && (c === ' ' || c === "\t")) {
+                        c = '';
+                    }
+                    t.push(c);
+                }
+                text= t.join('');
+            }
+            if(ii==2||ii==3){
+                 text = text.replace(/\\/g,"\\\\").replace(/\"/g,"\\\"");
+            }
+            if(ii==4){
+             text = text.replace(/\\\\/g,"\\").replace(/\\\"/g,'\"');
+            }
+             txtA.value = text;
+    }
+</script>
+{% endblock %}
