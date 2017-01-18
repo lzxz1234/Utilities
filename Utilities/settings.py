@@ -5,10 +5,13 @@ ADMINS = (
     ('lzxz1234', 'lzxz1234@gmail.com'),
     ('lzxz1234', '314946925@qq.com'),
 )
-
+ALLOWED_HOSTS = [
+    'utils.han5d.vip',
+    'utilities.chineseall.info'
+]
 MANAGERS = ADMINS
 
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
