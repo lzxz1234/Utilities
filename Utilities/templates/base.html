@@ -101,6 +101,14 @@ $(document).ready(function() {
             width: orginwidth,
         }, 200 );
     });
+    $("#laohuangli").toggle(function() {
+        $.get("/static/html/laohuangli.html", function(content) {
+            $("body").append(content);
+            $(".rightcorner").fadeIn(1000);
+        });
+    }, function() {
+        $(".rightcorner").remove();
+    });
 });
 </script>
 <script src="http://m.baidu.com/static/ala/webapp/api.js"></script>

@@ -60,15 +60,6 @@ $(document).ready(function() {
 		refreshIndex(DEFAULT_ALL_TOOLS);
 	}
 	$("#toollist ul").disableSelection();
-	
-	$("#laohuangli").toggle(function() {
-        $.get("/static/html/laohuangli.html", function(content) {
-            $("body").append(content);
-            $(".rightcorner").fadeIn(1000);
-        });
-    }, function() {
-        $(".rightcorner").remove();
-    });
 });
 
 function completesetindex() {
@@ -81,8 +72,6 @@ function completesetindex() {
 };
 
 function setindex() {
-	showMsg("由于各种原因，服务器端无数据库服务，故全部设置仅保存在客户端，敬请注意，谢谢!!!");
-	
 	$("#toollist ul").sortable({
 	    connectWith: ".connectedSortable"
 	});
@@ -125,11 +114,5 @@ function refreshIndex(allTools) {
         $("#toollist").append("</ul></div>");
     });
 };
-
-function showMsg(msg) {
-	$(".autoremove").remove();
-	$("#navbar").after("<div class=\"autoremove alert alert-error\">" + msg + "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button></div>");
-}
-
 </script>
 {% endblock %}
