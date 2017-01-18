@@ -6,14 +6,17 @@ from django.template.loader import get_template
 from qrcode.main import QRCode, constants
 import datetime
 
+
 def index(request):
     now = datetime.datetime.now()
     t = get_template('index.html')
     html = t.render(Context({'current_date': now}))
     return HttpResponse(html)
 
+
 def app(request):
     return HttpResponse("Welcome to Baidu Cloud!\n")
+
 
 def func(request, name):
     try :
@@ -23,6 +26,7 @@ def func(request, name):
         
     html = t.render(RequestContext(request))
     return HttpResponse(html)
+
 
 def qrcode(request):
     qr = QRCode(

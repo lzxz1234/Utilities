@@ -8,31 +8,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-if 'SERVER_SOFTWARE' in os.environ:
-    from bae.core import const
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'cluster11db3',                     
-            'USER': const.MYSQL_USER,                    
-            'PASSWORD': const.MYSQL_PASS,                 
-            'HOST': const.MYSQL_HOST,                      
-            'PORT': const.MYSQL_PORT,                     
-        }
-    }
-    DEBUG = False
-else:
-#    DATABASES = {
-#        'default': {
-#            'ENGINE': 'django.db.backends.mysql', 
-#            'NAME': 'djangodb', 
-#            'USER': 'django',
-#            'PASSWORD': 'django',    
-#            'HOST': 'localhost',                   
-#            'PORT': '3306',                      
-#        }
-#    }
-    DEBUG = True
+DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG
 
