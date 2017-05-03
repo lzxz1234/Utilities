@@ -43,6 +43,6 @@ def qrcode(request):
     else :
         return HttpResponse()
     qr.make(fit=True)
-    response = HttpResponse(mimetype="image/png")
+    response = HttpResponse()
     qr.make_image().save(response, "PNG")
     return response
