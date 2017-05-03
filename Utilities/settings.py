@@ -6,12 +6,13 @@ ADMINS = (
     ('lzxz1234', '314946925@qq.com'),
 )
 ALLOWED_HOSTS = [
+    'localhost',
     'utils.han5d.vip',
     'utilities.chineseall.info'
 ]
 MANAGERS = ADMINS
 
-DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG
 

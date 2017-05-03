@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<pre><code>{{ content }}</code></pre>
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="/static/js/highlight/styles/default.css">
+{% endblock %}
+
+{% block js %}
+<script src="/static/js/highlight/highlight.pack.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+</script>
+{% endblock %}

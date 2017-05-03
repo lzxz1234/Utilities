@@ -1,4 +1,5 @@
-#-*- coding:utf-8 -*-
+#!/usr/bin/python
+# coding=utf-8
 from django.http import HttpResponse, Http404
 from django.template import Context, RequestContext
 from django.template.base import TemplateDoesNotExist
@@ -7,19 +8,19 @@ from qrcode.main import QRCode, constants
 import datetime
 
 
-def index(request):
+def index(_):
     now = datetime.datetime.now()
     t = get_template('index.html')
     html = t.render(Context({'current_date': now}))
     return HttpResponse(html)
 
 
-def app(request):
+def app(_):
     return HttpResponse("Welcome to Baidu Cloud!\n")
 
 
 def func(request, name):
-    try :
+    try:
         t = get_template(name)
     except TemplateDoesNotExist:
         raise Http404
