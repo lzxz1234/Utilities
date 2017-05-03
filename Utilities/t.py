@@ -18,14 +18,14 @@ q = Auth(access_key, secret_key)
 def save(request):
     key = short_int(key_seq.next())
     content = request.POST.get('content') or request.GET.get('content')
-    token = q.upload_token('lzxz1234', key, 60)
+    token = q.upload_token('utils', key, 60)
     put_data(token, key, content)
     return HttpResponseRedirect('/t/' + key)
 
 
 def preview(request, key):
     t = get_template("preview.html")
-    base_url = 'http://%s/%s' % ('op44sjbfj.bkt.clouddn.com', key)
+    base_url = 'http://%s/%s' % ('opd7wje7a.bkt.gdipper.com', key)
     private_url = q.private_download_url(base_url)
     r = requests.get(private_url)
     if r.status_code == 200:
