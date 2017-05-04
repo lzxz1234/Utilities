@@ -29,7 +29,7 @@ def preview(request, key):
     private_url = q.private_download_url(base_url)
     r = requests.get(private_url)
     if r.status_code == 200:
-        html = t.render(Context({'content': r.text}))
+        html = t.render(Context({'content': r.text, 'key': key}))
         return HttpResponse(html)
     else:
         raise Http404
