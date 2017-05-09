@@ -1,0 +1,4 @@
+django==1.8.18
+requests==2.13.0
+qiniu==7.1.2
+image=1.5.5
