@@ -71,7 +71,6 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -81,7 +80,6 @@ SECRET_KEY = 'x@u@^u^d02vms^mz8&amp;x+8ix*qkcp01z8iifig9i07pvu#ay0&amp;$'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -91,8 +89,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'Utilities.http.SetRemoteAddrFromForwardedFor',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 ROOT_URLCONF = 'Utilities.urls'
@@ -101,10 +97,7 @@ ROOT_URLCONF = 'Utilities.urls'
 WSGI_APPLICATION = 'wsgi.application'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
+    os.path.join(os.path.dirname(__file__), 'templates').replace('\\', '/'),
 )
 
 INSTALLED_APPS = (
@@ -148,4 +141,11 @@ LOGGING = {
             'propagate': True,
         },
     }
+}
+
+QINIU = {
+    'access_key': 'fMC0juUTnyaqx9eQ_xsRrg903UuZVskIAMTIhsgQ',
+    'secret_key': '-O8vmA5heCwBaRZmdCSpKg6b52dpxNvTflIArrFP',
+    'domain': 'op44sjbfj.bkt.clouddn.com',
+    'bucket': 'lzxz1234'
 }
