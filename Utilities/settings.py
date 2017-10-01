@@ -7,8 +7,8 @@ ADMINS = (
 )
 ALLOWED_HOSTS = [
     'localhost',
-    'utils.han5d.vip',
-    'utilities.chineseall.info'
+    'utils.lzxz1234.cn',
+    'utilities.lzxz1234.cn'
 ]
 MANAGERS = ADMINS
 
