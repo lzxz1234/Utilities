@@ -14,7 +14,7 @@ key_seq = itertools.count(start=int(time.time()), step=1)
 q = Auth(QINIU['access_key'], QINIU['secret_key'])
 
 
-def index():
+def index(_):
     return HttpResponseRedirect('/func/share.html')
 
 
