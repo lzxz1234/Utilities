@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^qrcode', 'Utilities.view.qrcode'),
     url(r'^ip', 'Utilities.http.ip'),
     url(r'^meta', 'Utilities.http.meta'),
+    url(r'^t', 'Utilities.t.index'),
     url(r'^t/save', 'Utilities.t.save'),
     url(r'^t/(?P<key>\w+)', 'Utilities.t.preview'),
     # Examples:
